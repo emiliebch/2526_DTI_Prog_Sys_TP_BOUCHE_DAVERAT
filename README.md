@@ -84,5 +84,43 @@ On ajoute le boucle de comparaison suivante juste avant la ligne "*pid=fork();*"
 ## 4. Affichage du code de retour (ou du signal) de la commande précédente dans le prompt 
 Vous retrouverez le code complet de cette question dans le fichier *return_code.c*.
 
+Pour éviter les répétition, on écrit la fonction *write_return* qui écrit le code de retour.
+
+```c
+void write_return(char *strl, char *command, int code) {
+    sprintf(command,"%d",code);
+    strcat(strl,command);
+    strcat(strl,"]\n");
+    write(STDOUT_FILENO,strl,strlen(strl));
+
+}
+```
+
+On modifie le processus de gestion du shell :
+```c
+ pid=fork();
+        if(pid!=0){ // The father waits the end of the command execution in the son
+            wait(&status);
+            if (WIFEXITED(status)) { // true if the son finished normally
+                strcpy(out_message, "enseash [exit:");
+                write_return(out_message, end_command, WEXITSTATUS(status)); // return the end value of the son
+
+            } else if (WIFSIGNALED(status)) { //true if the son finished due to a signal
+                strcpy(out_message, "enseash [sign:");
+                write_return(out_message, end_command, WTERMSIG(status)); // return the number of the signal which cause the son's end
+
+            }
+
+        }
+        else {
+            execlp(buffer,buffer, (char*)NULL); // executes the entered command
+            exit(EXIT_SUCCESS);
+        }
+```
+
+pas encore testé
+reste à definir out_message et end_command
+
+
 
 
