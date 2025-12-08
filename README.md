@@ -1,4 +1,4 @@
-# 2526_DTI_Prog_Sys_TP_BOUCHE_DAVERAT
+# Compte rendu 
 
 
 ## 1. Affichage d'un message d'accueil
@@ -30,9 +30,14 @@ On peut maintenant taper une commande dans le terminal:
 ### b) Exécution d’une commande simple (sans argument)
 On veut executer les commandes de bases d'une console. D'après le cours, on doit utiliser *execlp*. Le caractère "enter" est pris en compte avec le *read* donc il faut le retirer pour ne pas fausser *execlp*. Quand on ne le retire pas, la commande saisie ne s'execute pas.
 
-On ajoute les lignes suivantes dans la fonction main :
+La boucle while(1) devient donc :
 ```c
-       int pid,status;
+    ssize_t command_size;
+    while (1) {
+        command_size=read(STDIN_FILENO,buffer,BUFSIZE);
+        //read(STDIN_FILENO,buffer,BUFSIZE); // read the entered command
+
+        int pid,status;
         buffer[command_size-1]='\0';
         pid=fork();
         if(pid!=0){ // The father waits the end of the command execution in the son
@@ -42,11 +47,16 @@ On ajoute les lignes suivantes dans la fonction main :
             execlp(buffer,buffer, (char*)NULL);
             exit(EXIT_SUCCESS);
         }
+    }
 ```
+
 <img width="836" height="156" alt="image" src="https://github.com/user-attachments/assets/32d062a1-c047-4f21-907b-bd9f84081d2b" />
 
 ### c) Retour au prompt enseash % et attente de la commande suivante
-On ajoute dans la boucle infinie la ligne :
+On ajoute dau début de la boucle infinie la ligne suivante qui permet de retourner à la ligne et d'attendre la prochaine commande ( et on modifie le *write* de l'affichage pour que '*enseash %*' ne s'affiche qu'une seule fois) :
 ```c
-write(1,"%",strlen("%"));
+write(1,"enseash %",strlen("enseash %"));
 ```
+<img width="966" height="156" alt="image" src="https://github.com/user-attachments/assets/b29ee5a4-2afe-45d9-98fa-9527071dd9f9" />
+
+
