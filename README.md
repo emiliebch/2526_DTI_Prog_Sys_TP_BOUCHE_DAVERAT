@@ -17,7 +17,7 @@ int main(){
 
 ## 2.Exécution de la commande saisie et retour au prompt (REPL : read–eval–print loop) :
 ### a) Lecture de la commande saisie,
-On rajoute dans le mainla boucle while(1) :
+On rajoute dans le mainla boucle while(1) dans la fonction main:
 ```c
     while (1) {
         read (0,buffer,BUFSIZE); // read the entered command
