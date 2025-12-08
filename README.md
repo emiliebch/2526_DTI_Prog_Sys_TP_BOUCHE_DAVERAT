@@ -69,6 +69,8 @@ Vous retrouverez le code de cette question dans le fichier *manage_exit.c*.
 
 On veut comparer le texte saisie à la chaîne de caractère "*exit*", on utilise donc la fonction ***strcmp*** qui renvoie 0 si les deux chaînes de caractère qu'elle prend en argument sont identiques.
 
+Pour la sortie avec *ctrl+d*, on sait que la commande *ctrl+d* envoie le message d'End Of File. Ce qui signifie qu'il n'y a plus rien à lire et la variable *command_size* est nul. Donc il suffit de rajouter la condition "*||command_size==0*" dans le *if* pour prendre en compte le *ctrl+d*.
+
 On ajoute le boucle de comparaison suivante juste avant la ligne "*pid=fork();*" pour éviter que d'autres processus ne se créent et s'exécutent avant la comparaison avec *exit*:
 ```c
         if (strcmp("exit",buffer)==0||command_size==0) {
@@ -78,6 +80,8 @@ On ajoute le boucle de comparaison suivante juste avant la ligne "*pid=fork();*"
 ```
 
 <img width="966" height="179" alt="image" src="https://github.com/user-attachments/assets/e01ab8fc-94ec-4117-8ebe-b6aba691db54" />
+
+## 4. Affichage du code de retour (ou du signal) de la commande précédente dans le prompt 
 
 
 
