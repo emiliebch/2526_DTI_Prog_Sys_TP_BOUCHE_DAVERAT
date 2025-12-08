@@ -17,7 +17,7 @@ int main(){
 <img width="811" height="113" alt="image" src="https://github.com/user-attachments/assets/58b78c82-9695-45d0-9c30-5a4410f6a007" />
 
 ## 2.Exécution de la commande saisie et retour au prompt (REPL : read–eval–print loop) :
-Vous retrouverez le code de cette question dans le fichier *execute_command.c*.
+Vous retrouverez le code complet de cette question dans le fichier *execute_command.c*.
 
 
 ### a) Lecture de la commande saisie
@@ -65,7 +65,7 @@ write(1,"enseash %",strlen("enseash %"));
 <img width="966" height="156" alt="image" src="https://github.com/user-attachments/assets/b29ee5a4-2afe-45d9-98fa-9527071dd9f9" />
 
 ## 3. Gestion de la sortie du shell avec la commande “exit” ou un <ctrl>+d
-Vous retrouverez le code de cette question dans le fichier *manage_exit.c*.
+Vous retrouverez le code complet de cette question dans le fichier *manage_exit.c*.
 
 On veut comparer le texte saisie à la chaîne de caractère "*exit*", on utilise donc la fonction ***strcmp*** qui renvoie 0 si les deux chaînes de caractère qu'elle prend en argument sont identiques.
 
@@ -82,6 +82,7 @@ On ajoute le boucle de comparaison suivante juste avant la ligne "*pid=fork();*"
 <img width="966" height="179" alt="image" src="https://github.com/user-attachments/assets/e01ab8fc-94ec-4117-8ebe-b6aba691db54" />
 
 ## 4. Affichage du code de retour (ou du signal) de la commande précédente dans le prompt 
+Vous retrouverez le code complet de cette question dans le fichier *return_code.c*.
 
 
 
