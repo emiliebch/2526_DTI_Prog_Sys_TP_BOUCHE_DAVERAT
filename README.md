@@ -195,6 +195,6 @@ On modifie la durée d'execution pour mettre 5s
 
 On mesure bien 5s. Le code fonctionne.
 
-## 5. Exécution d’une commande complexe (avec arguments) ;
+## 6. Exécution d’une commande complexe (avec arguments) ;
 
-
+Pour permettre l'exécution de commandes complexes avec des arguments, nous utilisons la fonction strtok pour séparer les arguments de la commande saisie. La fonction separeCommande découpe la ligne de commande en un tableau d'arguments et le transmet à execvp pour exécution.
