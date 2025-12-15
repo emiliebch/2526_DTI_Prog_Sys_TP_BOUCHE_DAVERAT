@@ -117,9 +117,27 @@ On modifie le processus de gestion du shell :
             exit(EXIT_SUCCESS);
         }
 ```
+On obtient bien le resultat voulu :
+<img width="813" height="244" alt="image" src="https://github.com/user-attachments/assets/57f27aef-bd8a-4338-8c41-42d0dcfbee4f" />
 
-pas encore testé
-reste à definir out_message et end_command
+Pour vérifier que le programme fonctionne bien lorsqu'une commande échoue, on arrête le processus fils avant la fin de l'execution de la commande. Pour cela on utilise la commadne **kill** dans un autre terminal.
+
+```c
+            printf("%d\n", getpid());
+            sleep(10);
+            execlp(buffer,buffer, (char*)NULL); // executes the entered command
+            exit(EXIT_FAILURE);
+```
+
+Pour arrêter le processus, il faut récupérer son numéro avec la fonction **getpid()**. On ajoute un temps d'attente pour avoir le temps d'arrêter le processus avant la fin.
+
+Commande pour kill le fils :
+<img width="467" height="54" alt="image" src="https://github.com/user-attachments/assets/025e6910-3c5b-49c4-8b25-6092299b1d41" />
+
+Résultat obtenu :
+<img width="816" height="225" alt="image" src="https://github.com/user-attachments/assets/8749bd43-1f8d-4391-a8c9-3775c6cf9acd" />
+
+
 
 
 
