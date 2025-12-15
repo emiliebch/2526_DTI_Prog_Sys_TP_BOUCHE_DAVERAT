@@ -201,7 +201,7 @@ Pour permettre l'exécution de commandes complexes avec des arguments, nous util
 
 
 ```c
-char** separeCommande(char *cmd){
+char** separe_commande(char *cmd){
 	char **argv;
 	argv = malloc(20*sizeof(char*));
 	int i= 0;
