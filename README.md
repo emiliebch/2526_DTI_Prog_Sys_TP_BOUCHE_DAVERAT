@@ -217,3 +217,19 @@ char** separe_commande(char *cmd){
 	return argv;
 }
 ```
+on modifie la fonction exeCommande
+
+On applique ensuite ces deux fonction à notre commande pour cela est les implémante dans le while
+
+```c
+    while (1) {
+        write(1,"%",strlen("%"));
+	memset(buffer, 0, BUFSIZE);
+        command_size=read(STDIN_FILENO,buffer,BUFSIZE);
+	
+
+	if ((command_size = read(0, buffer, BUFSIZE)) == -1){
+		perror("read");
+		exit(EXIT_FAILURE);
+	}
+```
