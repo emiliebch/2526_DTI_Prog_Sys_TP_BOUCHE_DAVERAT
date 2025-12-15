@@ -137,8 +137,63 @@ Commande pour kill le fils :
 Résultat obtenu :
 <img width="816" height="225" alt="image" src="https://github.com/user-attachments/assets/8749bd43-1f8d-4391-a8c9-3775c6cf9acd" />
 
+## 5. Mesure du temps d’exécution de la commande en utilisant l’appel clock_gettime :
 
+La différence entre l'instant avant l'éxecution et l'instant à la fin de l'execution d'une commande nous indique la durée d'execution. On utilise start et stop qui sont deux structures timespec.
 
+```c
+if(pid!=0){ // The father waits the end of the command execution in the son
+            if (clock_gettime(CLOCK_REALTIME, &start)==-1) { // Recovery of time before the execution of a command
+                perror("clock_gettime");
+                exit(EXIT_FAILURE);
+            }
+            wait(&status);
+
+            if (clock_gettime(CLOCK_REALTIME, &stop)==1) { // end of execution time
+                perror("clock_gettime");
+                exit(EXIT_FAILURE);
+                
+            }
+```
+
+Le timer qu'on utilise est séparé en deux valeurs : le temps en ns et le temps en s.
+
+Il faut bien penser à prendre en compte les deux et les convertir en ms :
+
+```c
+    // ns and s to ms
+            time_exe_ns=stop.tv_nsec-start.tv_nsec;
+            time_exe_s=stop.tv_sec-start.tv_sec;
+            time_exe_ms=time_exe_s*1000+time_exe_ns*pow(10,-6);
+```
+Ensuite, on modifie la fonction **write_return** en conséquent :
+```c
+void write_return(char *strl, char *command, int code, int time_ms) {
+    sprintf(command,"%d",code);
+    strcat(strl,command);
+    strcat(strl,"|");
+    sprintf(command,"%d",time_ms);
+    strcat(strl,command);
+    strcat(strl,"ms]");
+    write(STDOUT_FILENO,strl,strlen(strl));
+}
+```
+On obtient donc :
+<img width="819" height="242" alt="image" src="https://github.com/user-attachments/assets/54f6742a-52c9-4d07-b16b-c353e6c7d20f" />
+
+On fait un test pour vérifier que le temps est bien pris en compte :
+
+```c
+printf("%d\n", getpid());
+            sleep(5);
+            execlp(buffer,buffer, (char*)NULL); // executes the entered command
+            exit(EXIT_FAILURE);
+```
+
+On modifie la durée d'execution pour mettre 5s
+<img width="819" height="242" alt="image" src="https://github.com/user-attachments/assets/f5f49cd7-c7b3-4371-8805-646bf1400c73" />
+
+On mesure bien 5s. Le code fonctionne.
 
 
 
