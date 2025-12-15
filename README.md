@@ -198,3 +198,22 @@ On mesure bien 5s. Le code fonctionne.
 ## 6. Exécution d’une commande complexe (avec arguments) ;
 
 Pour permettre l'exécution de commandes complexes avec des arguments, nous utilisons la fonction **strtok** pour séparer les arguments de la commande saisie. La fonction **separeCommande** découpe la ligne de commande en un tableau d'arguments et le transmet à **execvp** pour l'exécution. On peut tester avec la commande ls -l, et donc on veut récupérer séparément ls et -l.
+
+
+```c
+char** separeCommande(char *cmd){
+	char **argv;
+	argv = malloc(20*sizeof(char*));
+	int i= 0;
+
+	char *tmp = strtok(cmd, " ");
+
+	while (tmp != NULL) {
+		argv[i] = malloc(20*sizeof(char));
+		strcpy(argv[i],tmp);
+		i++;
+	}
+	argv[i-1][strlen(argv[i-1])-1] = '\0';
+	return argv;
+}
+```
