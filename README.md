@@ -196,40 +196,71 @@ On modifie la durée d'execution pour mettre 5s
 On mesure bien 5s. Le code fonctionne.
 
 ## 6. Exécution d’une commande complexe (avec arguments) ;
-
-Pour permettre l'exécution de commandes complexes avec des arguments, nous utilisons la fonction **strtok** pour séparer les arguments de la commande saisie. La fonction **separeCommande** découpe la ligne de commande en un tableau d'arguments et le transmet à **execvp** pour l'exécution. On peut tester avec la commande ls -l, et donc on veut récupérer séparément ls et -l.
-
+Vous retrouverez le code complet de cette question dans le fichier *complex_command.c*.
 
 ```c
-char** separe_commande(char *cmd){
-	char **argv;
-	argv = malloc(20*sizeof(char*));
-	int i= 0;
-
-	char *tmp = strtok(cmd, " ");
-
-	while (tmp != NULL) {
-		argv[i] = malloc(20*sizeof(char));
-		strcpy(argv[i],tmp);
-		i++;
-	}
-	argv[i-1][strlen(argv[i-1])-1] = '\0';
-	return argv;
+char** command_separation (char *command) {
+    char **argv;
+    argv=malloc(20*sizeof(char*));
+    int i=0;
+    char *tmp=strtok(command," ");
+    while (tmp!=NULL) {
+        argv[i]=malloc(20*sizeof(char));
+        strcpy(argv[i],tmp);
+        tmp=strtok(NULL," ");
+        i++;
+    }
+    argv[i-1][strlen(argv[i-1])-1]='\0'; // delete le "enter" charactere on the last argument
+    return argv;
 }
 ```
-on modifie la fonction exeCommande
 
-On applique ensuite ces deux fonction à notre commande pour cela est les implémante dans le while
+On crée en premier une fonction qui va servir à séparer chacune des commandes dans le shell. L'objectif est de séparer une commande comme *ls -l* dans un tableau de char donc de récupérer *ls* et *-l* indépendamment en les séparant au niveau de l'espace.
+Pour cela, on utilise la fonction *strtok*.
+Il ne faut pas oublier d'allouer la mémoire à notre tableau à chaque fois que l'on ajoute une valeur au tableau.
+Pour la lisibilité du code, on décide de créer une fonction *execute_command* pour alleger la fonction *main* qui devient :
 
 ```c
-    while (1) {
-        write(1,"%",strlen("%"));
-	memset(buffer, 0, BUFSIZE);
-        command_size=read(STDIN_FILENO,buffer,BUFSIZE);
-	
+int main(){
+    char welcome[BUFSIZE]="Bienvenue dans le shell ENSEA. \nPour quitter, tapez 'exit'.\nenseash % \n";
+    char buffer[BUFSIZE];
+    ssize_t command_size;
+    char **command_list;
 
-	if ((command_size = read(0, buffer, BUFSIZE)) == -1){
-		perror("read");
-		exit(EXIT_FAILURE);
-	}
+    write (STDOUT_FILENO,welcome,BUFSIZE); // displays the message contained in the buffer welcome
+
+    while (1) {
+        write(STDOUT_FILENO,"%",strlen("%"));
+        memset(buffer,'\0',BUFSIZE); // clear buffer
+        if ((command_size=read(STDIN_FILENO,buffer,BUFSIZE))==-1) {
+            perror("read");
+            exit(EXIT_FAILURE);
+        }
+        command_list=command_separation(buffer);
+        //read(STDIN_FILENO,buffer,BUFSIZE); // reads the entered command
+        execute_command(command_list,command_size);
+    }
+}
+```
+
+On sépra puis on execute les 2 commandes.
+
+La fonction *execute_command* contient toute la partie execution avec le fork, on adapte pour pouvoir prendre en agrument un tableau de chaîne de charactere :
+```c
+void execute_command (char **buffer, ssize_t command_size) {
+```
+On veut pouvoir executer plusieurs commande ce qui est impossible avec *execlp*. On va plutôt utiliser *execvp*.
+
+```c
+    pid=fork();
+    if(pid!=0){ // The father waits the end of the command execution in the son
+    ...
+    }
+    else {
+        printf("%d\n", getpid());
+        sleep(5);
+        execvp(buffer[0],buffer); // executes the entered command
+        exit(EXIT_FAILURE);
+
+    }
 ```
