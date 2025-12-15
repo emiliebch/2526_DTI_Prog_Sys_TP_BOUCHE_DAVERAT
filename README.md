@@ -197,4 +197,4 @@ On mesure bien 5s. Le code fonctionne.
 
 ## 6. Exécution d’une commande complexe (avec arguments) ;
 
-Pour permettre l'exécution de commandes complexes avec des arguments, nous utilisons la fonction **strtok** pour séparer les arguments de la commande saisie. La fonction **separeCommande** découpe la ligne de commande en un tableau d'arguments et le transmet à **execvp** pour exécution.
+Pour permettre l'exécution de commandes complexes avec des arguments, nous utilisons la fonction **strtok** pour séparer les arguments de la commande saisie. La fonction **separeCommande** découpe la ligne de commande en un tableau d'arguments et le transmet à **execvp** pour l'exécution. On peut tester avec la commande ls -l, et donc on veut récupérer séparément ls et -l.
